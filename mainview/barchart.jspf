@@ -1,0 +1,78 @@
+
+<%@page import="main.Nekretnine"%>
+<%@page import="main.Racuni"%>
+<%@page import="java.util.List"%>
+<%@page contentType="text/html" pageEncoding="UTF-8"%>
+
+ <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <i class="fa fa-bar-chart-o fa-fw"></i> Pregled računa nezavisno od nekretnine                            
+                        </div>
+                        <!-- /.panel-heading -->
+                        <div class="panel-body">
+                            <div class="row">
+                                <div class="col-lg-4">
+                                    <div class="table-responsive">
+                                        <% List<Racuni> racuniNP5 = Racuni.find5();
+                                        if (racuniNP5 != null && !racuniNP5.isEmpty()) {%>
+                                             <table class="table">
+                                                 <tr>
+                                                     <th>Iznos</th>                                                     
+                                                     <th>Tip</th>                                                     
+                                                     <th>Komentar</th>
+                                                     <th>Nekretnina</th>
+                                                 </tr>
+                                                 <% for (Racuni racNP5 : racuniNP5) {%>
+                                                 <tr>
+                                                     <td><%=racNP5.getIznos()%></td>
+                                                     <td><%=racNP5.getTip()%></td>
+                                                     <td><%=racNP5.getKomentar()%></td>
+                                                     <td><%=racNP5.getNeksk()%></td>
+                                                 </tr>
+                                                 <% }%>
+                                                </table>
+                            <% }%> 
+                                    </div>
+                                    <!-- /.table-responsive -->
+                                </div>
+                                <!-- /.col-lg-4 (nested) -->
+                                <div class="col-lg-8">
+                                    <div id="morris-bar"></div>
+                                </div>
+                                <!-- /.col-lg-8 (nested) -->
+                            </div>
+                            <!-- /.row -->
+                        </div>
+                        <!-- /.panel-body -->
+                    </div>
+                                    
+<%
+
+Integer pr1 = Racuni.countRacunStatus("%", "placen", "Januar");
+Integer pr2 = Racuni.countRacunStatus("%", "placen", "Februar");
+Integer pr3 = Racuni.countRacunStatus("%", "placen", "Mart");
+Integer pr4 = Racuni.countRacunStatus("%", "placen", "April");
+Integer pr5 = Racuni.countRacunStatus("%", "placen", "Maj");
+Integer pr6 = Racuni.countRacunStatus("%", "placen", "Jun");
+Integer pr7 = Racuni.countRacunStatus("%", "placen", "Jul");
+Integer pr8 = Racuni.countRacunStatus("%", "placen", "Avgust");
+Integer pr9 = Racuni.countRacunStatus("%", "placen", "Septembar");
+Integer pr10 = Racuni.countRacunStatus("%", "placen", "Oktobar");
+Integer pr11 = Racuni.countRacunStatus("%", "placen", "Novembar");
+Integer pr12 = Racuni.countRacunStatus("%", "placen", "Decembar");
+
+Integer pr1n = Racuni.countRacunStatus("%", "neplacen", "Januar");
+Integer pr2n = Racuni.countRacunStatus("%", "neplacen", "Februar");
+Integer pr3n = Racuni.countRacunStatus("%", "neplacen", "Mart");
+Integer pr4n = Racuni.countRacunStatus("%", "neplacen", "April");
+Integer pr5n = Racuni.countRacunStatus("%", "neplacen", "Maj");
+Integer pr6n = Racuni.countRacunStatus("%", "neplacen", "Jun");
+Integer pr7n = Racuni.countRacunStatus("%", "neplacen", "Jul");
+Integer pr8n = Racuni.countRacunStatus("%", "neplacen", "Avgust");
+Integer pr9n = Racuni.countRacunStatus("%", "neplacen", "Septembar");
+Integer pr10n = Racuni.countRacunStatus("%", "neplacen", "Oktobar");
+Integer pr11n = Racuni.countRacunStatus("%", "neplacen", "Novembar");
+Integer pr12n = Racuni.countRacunStatus("%", "neplacen", "Decembar");
+
+%>
+

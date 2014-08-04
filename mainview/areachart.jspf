@@ -1,0 +1,46 @@
+
+<%@page import="main.Stanje"%>
+<%@page import="java.sql.Array"%>
+<%@page import="main.Novcanik"%>
+<%@page import="main.Nekretnine"%>
+<%@page import="main.Racuni"%>
+<%@page import="java.util.List"%>
+<%@page contentType="text/html" pageEncoding="UTF-8"%>
+
+ <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <i class="fa fa-bar-chart-o fa-fw"></i> Uporedni prikaz stanja, uplata i isplata za zadnjih 6 unosa                           
+                        </div>
+                        <!-- /.panel-heading -->
+                        <div class="panel-body">
+                            <div id="area-example"></div>
+                        </div>
+                        <!-- /.panel-body -->
+                    </div>
+                                    
+<%
+Double[] dataLp6 = new Double[6]; 
+Double[] dataLp6i = new Double[6];
+Double[] dataLp6s = new Double[6];
+Integer i=0, a=0, b=0;
+Nekretnine usertr = (Nekretnine) session.getAttribute("user");
+
+List<Novcanik> last6u = (List<Novcanik>) Novcanik.findLast6(usertr.getImenek(),"uplata");
+for (Novcanik lp6 : last6u) {
+    dataLp6[i]=lp6.getIznos();
+    i++;
+}
+
+List<Novcanik> last6i = (List<Novcanik>) Novcanik.findLast6(usertr.getImenek(),"isplata");
+for (Novcanik lp6 : last6i) {
+    dataLp6i[a]=lp6.getIznos();
+    a++;
+}
+
+List<Stanje> last6s = (List<Stanje>) Stanje.findLast6();
+for (Stanje lp6 : last6s) {
+    dataLp6s[b]=lp6.getIznos();
+    b++;
+}
+%>
+

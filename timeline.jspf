@@ -1,0 +1,72 @@
+<%@page import="java.sql.SQLException"%>
+<%@page import="java.util.List"%>
+<%@page import="main.Novcanik"%>
+<%@page contentType="text/html" pageEncoding="UTF-8"%>
+
+<div class="modal fade" id="myModalTimeline" tabindex="-1" role="dialog" aria-labelledby="myModalTimeline" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title" id="myModalLabel">Timeline</h4>
+            </div>
+            <div class="modal-body">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <i class="fa fa-clock-o fa-fw"></i> Pregled poslednjih 6 uplata,troškova i kasice prasice.
+                    </div>                    
+                    <div class="panel-body">
+                        <ul class="timeline">
+                        <%  String xx1=user.getImenek();
+                            try { 
+                                List<Novcanik> nv = Novcanik.findLast6(xx1,"%plata");
+                                if (nv != null && !nv.isEmpty()) {
+                                for (Novcanik tmpnv : nv)  {
+                                if (tmpnv.getTransakcija().equals("uplata")) { %>
+                                    <li>
+                                        <div class="timeline-badge success"><i class="fa fa-thumbs-up"></i>
+                                        </div>
+                                        <div class="timeline-panel">
+                                            <div class="timeline-heading">
+                                                <h4 class="timeline-title">Uplata</h4>
+                                                <h5 class="timeline-title"><%=tmpnv.getKomentar()%></h5>
+                                                <p>
+                                                    <small class="text-muted"><i class="fa fa-time"></i><%=tmpnv.getDatum()%></small>
+                                                </p>
+                                            </div>
+                                            <div class="timeline-body">
+                                                <p>Iznos: <%=tmpnv.getIznos()%></p>
+                                            </div>
+                                        </div>
+                                    </li>
+                                    <% } else { %>
+                                            <li class="timeline-inverted">
+                                                <div class="timeline-badge danger"><i class="fa fa-credit-card"></i>
+                                                </div>
+                                                <div class="timeline-panel">
+                                                    <div class="timeline-heading">
+                                                        <h4 class="timeline-title">Troškovi</h4>
+                                                        <h5 class="timeline-title"><%=tmpnv.getKomentar()%></h5>
+                                                        <p>
+                                                            <small class="text-muted"><i class="fa fa-time"></i><%=tmpnv.getDatum()%></small>
+                                                        </p>
+                                                    </div>
+                                                    <div class="timeline-body">
+                                                        <p>Iznos: <%=tmpnv.getIznos()%></p>
+                                                        </div>
+                                                </div>
+                                            </li>
+                                    <% } %>
+                          <% } } } catch (SQLException ex) {
+                                    ex.printStackTrace(); 
+                                 }%>  
+                        </ul>
+                    </div>                   
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Zatvori</button>
+            </div>
+        </div>       
+    </div>  
+</div>

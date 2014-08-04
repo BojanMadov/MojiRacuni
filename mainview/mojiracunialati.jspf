@@ -1,0 +1,353 @@
+<%@page import="java.util.Date"%>
+<%@page import="java.text.SimpleDateFormat"%>
+<%@page import="java.io.File"%>
+<%@page import="main.Racuni"%>
+<%@page import="main.Novcanik"%>
+<%@page import="main.Stanje"%>
+<%@page import="main.Logging"%>
+<%@page import="java.util.List"%>
+<%@page import="main.Nekretnine"%>
+<%@page contentType="text/html" pageEncoding="UTF-8"%>
+<% String xx=user.getImenek();
+Stanje strr = Stanje.findMain(); 
+Integer nov = Novcanik.countNovcanik(xx);
+Integer nov2 = Racuni.countRacun(xx);
+String datumCC = sdf.format(new Date()).toString();
+%>
+
+
+<a href="#" class="list-group-item" data-toggle="modal" data-target="#myModalUNR">
+    <i class="fa fa-tag fa-fw"></i> Unos novog računa                                    
+</a>
+<a href="#" class="list-group-item" data-toggle="modal" data-target="#myModalUNP">
+    <i class="fa fa-smile-o fa-fw"></i> Unos nove uplate                                    
+</a>
+<a href="#" class="list-group-item" data-toggle="modal" data-target="#myModalUNT">
+    <i class="fa fa-meh-o fa-fw"></i> Unos novih troškova                                    
+</a>
+<a href="#" class="list-group-item" data-toggle="modal" data-target="#myModalSR">
+    <i class="fa fa-euro fa-fw"></i> Stanje računa
+    <span class="pull-right text-muted small"><em><%=strr.getIznos()%></em>
+    </span>
+</a>
+<a href="#" class="list-group-item" data-toggle="modal" data-target="#myModalLUT">
+    <i class="fa fa-list fa-fw"></i> Listing uplata i toškova
+    <span class="pull-right text-muted small"><em><%=nov%></em>
+    </span>
+</a>
+<a href="#" class="list-group-item" data-toggle="modal" data-target="#myModalLR">
+    <i class="fa fa-th fa-fw"></i> Plati račun
+    <span class="pull-right text-muted small"><em><%=nov2%></em>
+    </span>
+</a>   
+
+ 
+            <!-- Modal UNR -->
+ 
+<div class="modal fade" id="myModalUNR" tabindex="-1" role="dialog" aria-labelledby="myModalProfil" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title" id="myModalLabel">Unos novog računa </h4>               
+            </div>
+            <div class="modal-body">
+                <form class="form-horizontal" role="form" action="CommandServlet?cmd=unr&nksk=<%=user.getImenek()%>" id="unr" method="post">
+                                <div class="form-group">
+                                    <label for="imenek" class="col-sm-2 control-label">Iznos:</label>
+                                    <div class="col-sm-10">
+                                        <input type="text" class="form-control" id="iznos"  name="iznos">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="imevlas" class="col-sm-2 control-label">Broj računa:</label>
+                                    <div class="col-sm-10">
+                                        <input type="text" class="form-control" id="brracuna" name="brracuna">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                <label for="adr" class="col-sm-2 control-label">Tip:</label>
+                                <div class="col-sm-10">
+                                <select id="tip" name="tip" class="form-control">
+                                    <option selected="selected" value="">select</option>
+                                    <option value="infostan">Infostan</option>
+                                    <option value="telefon">Telefon</option>
+                                    <option value="struja">Struja</option>
+                                    <option value="ostalo">Ostalo</option>
+                                </select>
+                                </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="adr" class="col-sm-2 control-label">Mesec:</label>
+                                    <div class="col-sm-10">
+                                    <select id="mesec" name="mesec" class="form-control">
+                                        <option selected="selected" value="">select</option>
+                                        <option value="Januar">Januar</option>
+                                        <option value="Februar">Februar</option>
+                                        <option value="Mart">Mart</option>
+                                        <option value="April">April</option>
+                                        <option value="Maj">Maj</option>
+                                        <option value="Jun">Jun</option>
+                                        <option value="Jul">Jul</option>
+                                        <option value="Avgust">Avgust</option>
+                                        <option value="Septembar">Septembar</option>
+                                        <option value="Oktobar">Oktobar</option>
+                                        <option value="Novembar">Novembar</option>
+                                        <option value="Decembar">Decembar</option>
+                                    </select>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="adr" class="col-sm-2 control-label">Godina:</label>
+                                    <div class="col-sm-10">
+                                        <input type="text" class="form-control" id="godina" name="godina" value="2014">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="adr" class="col-sm-2 control-label">Komentar:</label>
+                                    <div class="col-sm-10">
+                                        <input type="text" class="form-control" id="kom" name="kom">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="adr" class="col-sm-2 control-label">Stanje:</label>
+                                    <div class="col-sm-10">
+                                       <select id="stanje" name="stanje" class="form-control">
+                                            <option selected="selected" value="">select</option>
+                                            <option value="placen">Placen</option>
+                                            <option value="neplacen">Neplacen</option>                                    
+                                        </select> 
+                                    </div>
+                                </div>
+                  </form>
+                  <%@include file="ocr.jspf" %>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Zatvori</button>
+                <button type="button" class="btn btn-primary" onclick="document.getElementById('unr').submit();">Unesi</button>
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+
+
+
+
+            <!-- Modal UNP -->
+ 
+<div class="modal fade" id="myModalUNP" tabindex="-1" role="dialog" aria-labelledby="myModalProfil" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title" id="myModalLabel">Unos nove uplate</h4>               
+            </div>
+            <div class="modal-body">
+                <form class="form-horizontal" role="form" action="CommandServlet?cmd=unp&nksk=<%=user.getImenek()%>" id="unp" method="post">
+                                <div class="form-group">
+                                    <label for="imenek" class="col-sm-2 control-label">Iznos:</label>
+                                    <div class="col-sm-10">
+                                        <input type="text" class="form-control" id="iznosu"  name="iznosu">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="imevlas" class="col-sm-2 control-label">Datum:</label>
+                                    <div class="col-sm-10">
+                                        <input type="text" class="form-control" id="datum" name="datum" value="<%=datumCC%>">
+                                    </div>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="adr" class="col-sm-2 control-label">Komentar:</label>
+                                    <div class="col-sm-10">
+                                        <input type="text" class="form-control" id="komu" name="komu">
+                                    </div>
+                                </div>                                
+                  </form>
+                
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Zatvori</button>
+                <button type="button" class="btn btn-primary" onclick="document.getElementById('unp').submit();">Unesi</button>
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+                                
+                                
+             <!-- Modal UNT -->
+ 
+<div class="modal fade" id="myModalUNT" tabindex="-1" role="dialog" aria-labelledby="myModalProfil" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title" id="myModalLabel">Unos novih troskova</h4>                
+            </div>
+            <div class="modal-body">
+                <form class="form-horizontal" role="form" action="CommandServlet?cmd=unt&nksk=<%=user.getImenek()%>" id="unt" method="post">
+                                <div class="form-group">
+                                    <label for="imenek" class="col-sm-2 control-label">Iznos:</label>
+                                    <div class="col-sm-10">
+                                        <input type="text" class="form-control" id="iznost"  name="iznost">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="imevlas" class="col-sm-2 control-label">Datum:</label>
+                                    <div class="col-sm-10">
+                                        <input type="text" class="form-control" id="datumt" name="datumt" value="<%=datumCC%>">
+                                    </div>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="adr" class="col-sm-2 control-label">Komentar:</label>
+                                    <div class="col-sm-10">
+                                        <input type="text" class="form-control" id="komt" name="komt">
+                                    </div>
+                                </div>
+                  </form>
+                
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Zatvori</button>
+                <button type="button" class="btn btn-primary" onclick="document.getElementById('unt').submit();">Unesi</button>
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+                                
+
+
+             <!-- Modal SR -->
+ 
+<div class="modal fade" id="myModalSR" tabindex="-1" role="dialog" aria-labelledby="myModalProfil" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title" id="myModalLabel">Trenutno stanje: <%=strr.getIznos()%></h4>               
+            </div>
+            <div class="modal-body">
+                <% List<Stanje> stanjeAll = Stanje.findAll();
+                        if (stanjeAll != null && !stanjeAll.isEmpty()) {%>
+                    <table class="table">
+                        <tr>
+                            <th>Iznos</th>
+                            <th>Datum</th>
+                        </tr>
+                        <% for (Stanje nek : stanjeAll) {%>
+                        <tr>
+                            <td><%=nek.getIznos()%></td>
+                            <td><%=nek.getDatum()%></td>                            
+                        </tr>
+                        <% }%>
+                    </table>
+                    <% }%>       
+                
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Zatvori</button>               
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+
+                    
+             <!-- Modal LUT -->
+ 
+<div class="modal fade" id="myModalLUT" tabindex="-1" role="dialog" aria-labelledby="myModalProfil" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title" id="myModalLabel">Listing uplata i troskova</h4>                
+            </div>
+            <div class="modal-body">
+                <% List<Novcanik> novcAll = Novcanik.findAll(xx);
+                        if (novcAll != null && !novcAll.isEmpty()) {%>
+                    <table class="table">
+                        <tr>
+                            <th>Iznos</th>
+                            <th>Datum</th>
+                            <th>Transakcija</th>
+                            <th>Komentar</th>
+                        </tr>
+                        <% for (Novcanik nek : novcAll) {%>
+                        <tr>
+                            <td><%=nek.getIznos()%></td>
+                            <td><%=nek.getDatum()%></td>  
+                            <td><%=nek.getTransakcija()%></td>
+                            <td><%=nek.getKomentar()%></td> 
+                        </tr>
+                        <% }%>
+                    </table>
+                    <% }%>       
+                
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Zatvori</button>               
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+
+
+                     <!-- Modal LR -->
+ 
+<div class="modal fade" id="myModalLR" tabindex="-1" role="dialog" aria-labelledby="myModalProfil" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title" id="myModalLabel">Plati račun !</h4>               
+            </div>
+            <div class="modal-body">
+                <% List<Racuni> racuniNP = Racuni.findAllneplaceni(xx);
+                       if (racuniNP != null && !racuniNP.isEmpty()) {%>
+                            <table class="table">
+                                <tr>
+                                    <th>Iznos</th>
+                                    <th>Broj računa</th>
+                                    <th>Tip</th>
+                                    <th>Mesec</th>
+                                    <th>Godina</th>
+                                    <th>Komentar</th>
+                                    <th>Plati</th>
+                                </tr>
+                                <% for (Racuni racNP : racuniNP) {%>
+                                <tr>
+
+                                    <td><%=racNP.getIznos()%></td>
+                                    <td><%=racNP.getBrracuna()%></td>
+                                    <td><%=racNP.getTip()%></td>
+                                    <td><%=racNP.getMesec()%></td>
+                                    <td><%=racNP.getGodina()%></td>
+                                    <td><%=racNP.getKomentar()%></td>
+                                    <td>
+                                        <a href="CommandServlet?cmd=plati&id=<%=racNP.getId()%>" style="color: #777" class="glyphicon glyphicon-check">                                  
+                                        </a>
+                                    </td>
+                                </tr>
+                                <% }%>
+                            </table>
+                            <% }%>    
+                
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Zatvori</button>               
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>

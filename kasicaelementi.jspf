@@ -1,0 +1,202 @@
+<%@page import="main.Novcanik"%>
+<%@page import="java.util.Date"%>
+<%@page import="java.text.SimpleDateFormat"%>
+<%@page import="main.Kasica"%>
+<%@page import="main.Logging"%>
+<%@page import="java.util.List"%>
+<%@page import="main.Nekretnine"%>
+<%@page contentType="text/html" pageEncoding="UTF-8"%>
+
+<% 
+Kasica trenutna = Kasica.findByStatus("nova");
+SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy");
+String datumSNK = sdf.format(new Date()).toString();
+%>
+<script>
+    function selektor() {    
+        if ($("#disabledInput").val() >= 10000) {
+            $("#enbbt").show();
+            $("#disbt").hide();
+        } else {
+            $("#disbt").show();
+            $("#enbbt").hide();
+        } 
+}
+</script>
+<script type="text/javascript">
+$(function () {
+        $('#container').highcharts({
+            title: {
+                text: 'Zadnjih 5 kasica koje su razbijene',
+                x: -20 //center
+            },
+            subtitle: {
+                text: 'Kasica se može razbiti tek kad pređe vrednost od 10 000rsd',
+                x: -20
+            },
+            xAxis: {
+                categories: ['Kasica #1', 'Kasica #2', 'Kasica #3', 'Kasica #4', 'Kasica #5']
+            },
+            yAxis: {
+                title: {
+                    text: 'Iznos kasice'
+                },
+                plotLines: [{
+                    value: 0,
+                    width: 1,
+                    color: '#808080'
+                }]
+            },
+            tooltip: {
+                valueSuffix: ' RSD'
+            },
+            legend: {
+                layout: 'vertical',
+                align: 'right',
+                verticalAlign: 'middle',
+                borderWidth: 0
+            },
+            series: [{
+                name: 'Kasica prasica',
+                data: [11000, 23567, 10098.4, 14000.5, 18000.25]
+            }]
+        });
+    });    
+</script>
+
+
+
+<!-- Modal KP -->
+ 
+<div class="modal fade" id="myModalKP" tabindex="-1" role="dialog" aria-labelledby="myModalProfil" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h3 class="modal-title" id="myModalLabel">Kasica prasica</h3>
+                <h4 class="modal-title" id="iznoskasiceprasice">Trenuni iznos u kasici: </h4>                
+                <input class="form-control" id="disabledInput" type="text" placeholder="<%=trenutna.getIznos()%>" disabled value="<%=trenutna.getIznos()%>">                
+            </div>
+            <div class="modal-body">                
+               <div id="container" style="min-width: 520px; height: 400px; margin: 0 auto"></div>
+               <form class="form-horizontal" role="form" action="CommandServlet?cmd=kp&keykp=<%=user.getImenek()%>" id="kp" method="post"></form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal" >Zatvori</button>
+                <button type="button" id="disbt" class="btn btn-danger" data-dismiss="modal" disabled="disabled">Razbij me!</button>
+                <button type="button" id="enbbt" class="btn btn-warning" onclick="document.getElementById('kp').submit();">Razbij me!</button>
+            </div>
+        </div>       
+    </div>   
+</div> 
+            
+<!-- Modal SNK -->
+ 
+<div class="modal fade" id="myModalSNK" tabindex="-1" role="dialog" aria-labelledby="myModalProfil" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h3 class="modal-title" id="myModalLabel">Kasica prasica</h3>
+                <h4 class="modal-title" id="iznoskasiceprasice">Ubaci parice u kasicu</h4>
+            </div>
+            <div class="modal-body">                
+               <form class="form-horizontal" role="form" action="CommandServlet?cmd=snk&key=<%=user.getImenek()%>" id="snk" method="post">
+                                <div class="form-group">
+                                    <label for="iznossnk" class="col-sm-2 control-label">Iznos:</label>
+                                    <div class="col-sm-10">
+                                        <input type="text" class="form-control" id="iznossnk"  name="iznossnk">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="imevlas" class="col-sm-2 control-label">Datum:</label>
+                                    <div class="col-sm-10">
+                                        <input type="text" class="form-control" id="datumsnk" name="datumsnk" value="<%=datumSNK%>">
+                                    </div>
+                                </div>                                                               
+                  </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal" >Zatvori</button>
+                <button type="button" class="btn btn-primary" onclick="document.getElementById('snk').submit();">Unesi</button>
+            </div>
+        </div>       
+    </div>   
+</div>    
+            
+            
+<!-- Modal LRK -->
+ 
+<div class="modal fade" id="myModalLRK" tabindex="-1" role="dialog" aria-labelledby="myModalProfil" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h3 class="modal-title" id="myModalLabel">Kasica prasica</h3>
+                <h4 class="modal-title" id="iznoskasiceprasice">Spisak razbijenih kasica: </h4> 
+            </div>
+            <div class="modal-body">                
+                    <% List<Kasica> kasAll = Kasica.findAllRazbijena("razbijena");
+                        if (kasAll != null && !kasAll.isEmpty()) {%>
+                    <table class="table">
+                        <tr>
+                            <th>Iznos na dan razbijanja</th>
+                            <th>Datum kreiranja</th>
+                            <th>Datum razbijanja</th>                            
+                        </tr>
+                        <% for (Kasica kas : kasAll) {%>
+                        <tr>
+                            <td><%=kas.getIznos()%></td>
+                            <td><%=kas.getDatumkreiranja()%></td>  
+                            <td><%=kas.getDatumrazbijanja()%></td>                           
+                        </tr>
+                        <% }%>
+                    </table>
+                    <% }%> 
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal" >Zatvori</button>
+                
+            </div>
+        </div>       
+    </div>   
+</div>     
+            
+            
+            
+            <!-- Modal LKU -->
+ 
+<div class="modal fade" id="myModalLKU" tabindex="-1" role="dialog" aria-labelledby="myModalProfil" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h3 class="modal-title" id="myModalLabel">Kasica prasica</h3>
+                <h4 class="modal-title" id="iznoskasiceprasice">Listing uplata u kasicu: </h4> 
+            </div>
+            <div class="modal-body">                
+                    <% List<Novcanik> novcKas = Novcanik.findAllkasica();
+                        if (novcKas != null && !novcKas.isEmpty()) {%>
+                    <table class="table">
+                        <tr>
+                            <th>Iznos</th>
+                            <th>Datum</th>
+                            <th>Nekretnina sa koje je unos izvrsen</th>                            
+                        </tr>
+                        <% for (Novcanik nc : novcKas) {%>
+                        <tr>
+                            <td><%=nc.getIznos()%></td>
+                            <td><%=nc.getDatum()%></td>  
+                            <td><%=nc.getNeksk()%></td>                           
+                        </tr>
+                        <% }%>
+                    </table>
+                    <% }%> 
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal" >Zatvori</button>
+                
+            </div>
+        </div>       
+    </div>   
+</div>

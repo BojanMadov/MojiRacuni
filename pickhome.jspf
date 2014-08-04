@@ -1,0 +1,21 @@
+<%@page import="java.util.List"%>
+<%@page import="main.Nekretnine"%>
+<form method="post" action="CommandServlet?cmd=login" id="f1">
+    <% List<Nekretnine> nekretnine = Nekretnine.findAllstatus("aktivna");%>
+
+    <select class="form-control input-lg" id="nekretnine" name="nekretnine">
+        <% for (Nekretnine nek : nekretnine) {%>
+        <option value="<%=nek.getImenek()%>"><%=nek.getImenek()%></option>
+        <% }%>
+    </select><br>               
+
+
+    <div class="page-scroll">
+        <a href="#" class="btn btn-circle" onclick="document.getElementById('f1').submit();">
+            <i class="fa fa-angle-double-down animated"></i>
+        </a>
+    </div>
+</form>
+
+                
+                

@@ -1,0 +1,99 @@
+<%@page import="java.util.List"%>
+<%@page import="main.Nekretnine"%>
+<%@page contentType="text/html" pageEncoding="UTF-8"%>
+<table style="text-align: center; width: 800px">
+    <tr>
+        <td>
+            <button class="btn btn-primary btn-lg" data-toggle="modal" data-target="#myModal1">Dodaj nekretninu</button>
+            <p>Dodajte novu nekretninu ili aktivirajte vec postojecu.</p>
+
+            <!-- Modal -->
+            <div class="modal fade" id="myModal1" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                            <h4 class="modal-title" id="myModalLabel1">Dodaj me</h4>
+                        </div>
+                        <div class="modal-body">
+
+
+                            <form class="form-horizontal" role="form" action="CommandServlet?cmd=addnek" id="fadd" method="post">
+                                <div class="form-group">
+                                    <label for="imenek" class="col-sm-2 control-label">Ime nekretnine:</label>
+                                    <div class="col-sm-10">
+                                        <input type="text" class="form-control" id="imenekt"  name="imenekt" placeholder="Ime nekretnine">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="imevlas" class="col-sm-2 control-label">Ime vlasnika:</label>
+                                    <div class="col-sm-10">
+                                        <input type="text" class="form-control" id="imevlast" name="imevlast" placeholder="Ime vlasnika">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="adr" class="col-sm-2 control-label">Adresa:</label>
+                                    <div class="col-sm-10">
+                                        <input type="text" class="form-control" id="adrt" name="adrt" placeholder="Adresa">
+                                    </div>
+                                </div>
+
+                            </form>
+
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-danger" data-dismiss="modal">Zatvori</button>
+                            <button onclick="document.getElementById('fadd').submit();" type="button" class="btn btn-primary">Snimi</button>
+                        </div>
+                    </div>
+                </div>
+            </div>    
+        </td>
+
+
+        <td>
+            <button class="btn btn-primary btn-lg" data-toggle="modal" data-target="#myModal2">Obrisi nekretninu</button>
+            <p>Deaktivirajte neku od vec aktivnih nekretnina.</p>                                
+            <!-- Modal -->
+            <div class="modal fade" id="myModal2" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                            <h4 class="modal-title" id="myModalLabel2">Obrisi me</h4>
+                        </div>
+                        <div class="modal-body">
+                       <% List<Nekretnine> nekretnineNA = Nekretnine.findAllstatus("aktivna");
+                       if (nekretnineNA != null && !nekretnineNA.isEmpty()) {%>
+                            <table class="table">
+                                <tr>
+                                    <th>Ime nekretnine</th>
+                                    <th>Ime vlasnika</th>
+                                    <th>Adresa</th>
+                                    <th>Obrisi!</th>
+                                </tr>
+                                <% for (Nekretnine nekNA : nekretnineNA) {%>
+                                <tr>
+
+                                    <td><%=nekNA.getImenek()%></td>
+                                    <td><%=nekNA.getImevlasnik()%></td>
+                                    <td><%=nekNA.getAdresa()%></td>
+                                    <td>
+                                        <a href="CommandServlet?cmd=deleten&imen=<%=nekNA.getImenek()%>" style="color: #777" class="glyphicon glyphicon-remove">                                  
+                                        </a>
+                                    </td>
+                                </tr>
+                                <% }%>
+                            </table>
+                            <% }%>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-danger" data-dismiss="modal">Zatvori</button>
+                        </div>
+                    </div>
+                </div>
+            </div>    
+        </td>		
+
+    </tr>
+</table>

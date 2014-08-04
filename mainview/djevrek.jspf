@@ -1,0 +1,66 @@
+<%@page import="main.Racuni"%>
+<%@page import="java.util.List"%>
+<%@page contentType="text/html" pageEncoding="UTF-8"%>
+
+<div class="panel panel-default">
+                        <div class="panel-heading">
+                            <i class="fa fa-bar-chart-o fa-fw"></i> Đevrek računa
+                        </div>
+                        <div class="panel-body">
+                            <div id="donut-racuni"></div>
+                            <a href="#" class="btn btn-default btn-block" data-toggle="modal" data-target="#myModalDetalji">Detalji</a>
+                        </div>
+                        <!-- /.panel-body -->
+</div>
+
+<div class="modal fade" id="myModalDetalji" tabindex="-1" role="dialog" aria-labelledby="myModalProfil" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title" id="myModalLabel">Listing računa</h4>                
+            </div>
+            <div class="modal-body">
+                <% List<Racuni> rccAll = Racuni.findAll(xx);
+                        if (rccAll != null && !rccAll.isEmpty()) {%>
+                    <table class="table">
+                        <tr>
+                            <th>Iznos</th>
+                            <th>Broj računa</th>
+                            <th>Tip</th>
+                            <th>Mesec</th>
+                            <th>Godina</th>
+                            <th>Komentar</th>
+                            <th>Stanje</th>
+                        </tr>
+                        <% for (Racuni rcc : rccAll) {%>
+                        <tr>
+                            <td><%=rcc.getIznos()%></td>
+                            <td><%=rcc.getBrracuna()%></td>  
+                            <td><%=rcc.getTip()%></td>
+                            <td><%=rcc.getMesec()%></td> 
+                            <td><%=rcc.getGodina()%></td>  
+                            <td><%=rcc.getKomentar()%></td>
+                            <td><%=rcc.getStanje()%></td> 
+                        </tr>
+                        <% }%>
+                    </table>
+                    <% }%>       
+                
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Zatvori</button>               
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+<%  Integer racInf = Racuni.countRacunTip(xx,"infostan");
+    Integer racTel = Racuni.countRacunTip(xx,"telefon");
+    Integer racStr = Racuni.countRacunTip(xx,"struja");
+    Integer racOst = Racuni.countRacunTip(xx,"ostalo"); %>                   
+<script>
+
+          
+</script>

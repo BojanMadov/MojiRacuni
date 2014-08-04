@@ -1,0 +1,24 @@
+<%@page import="java.util.List"%>
+<%@page import="main.Nekretnine"%>
+<% List<Nekretnine> nekretnineAll = Nekretnine.findAll();
+    if (nekretnineAll != null && !nekretnineAll.isEmpty()) {%>
+<table class="table">
+    <tr>
+        <th>Ime nekretnine</th>
+        <th>Ime vlasnika</th>
+        <th>Adresa nekretnine</th>
+        <th>Status</th>
+
+    </tr>
+    <% for (Nekretnine nek : nekretnineAll) {%>
+    <tr>
+
+        <td><%=nek.getImenek()%></td>
+        <td><%=nek.getImevlasnik()%></td>
+        <td><%=nek.getAdresa()%></td>
+        <td><%=nek.getStatus()%></td>
+
+    </tr>
+    <% }%>
+</table>
+<% }%>                
